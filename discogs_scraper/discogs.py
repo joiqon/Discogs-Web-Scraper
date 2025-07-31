@@ -33,15 +33,17 @@ def get_discogs_metadata(url):
 
     data = response.json()
     fields = {
-        'artist': data['artists'][0]['name'] if 'artists' in data else '',
-        'title': data.get('title', ''),
-        'year': data.get('year', ''),
-        'genres': ', '.join(data.get('genres', [])),
-        'styles': ', '.join(data.get('styles', [])),
-        'label': data['labels'][0]['name'] if 'labels' in data else '',
-        'discogs_url': url,
-        'cover_image_url': data.get('images', [{}])[0].get('resource_url', '')
-    }
+    'artist': data['artists'][0]['name'] if 'artists' in data else '',
+    'title': data.get('title', ''),
+    'year': data.get('year', ''),
+    'genres': ', '.join(data.get('genres', [])),
+    'styles': ', '.join(data.get('styles', [])),
+    'label': data['labels'][0]['name'] if 'labels' in data else '',
+    'country': data.get('country', ''),
+    'discogs_url': url,
+    'cover_image_url': data.get('images', [{}])[0].get('resource_url', '')
+}
+
     tracklist = [
         f"{track['position']}. {track['title']} ({track.get('duration', 'n/a')})"
         for track in data.get('tracklist', [])
