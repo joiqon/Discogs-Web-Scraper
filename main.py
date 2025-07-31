@@ -13,10 +13,18 @@ OUTPUT_LOCATION = '/Users/josephknight/Library/Mobile Documents/iCloud~md~obsidi
 def extract_master_or_release_id(url):
     parsed = urlparse(url)
     parts = parsed.path.strip('/').split('/')
-    if 'master' in parts:
-        return 'master', parts[-1]
-    elif 'release' in parts:
-        return 'release', parts[-1]
+
+    if 'master' in parts or 'release' in parts:
+        item_type = 'master' if 'master' in parts else 'release'
+        try:
+            index = parts.index(item_type)
+            # Handle cases like "734427" or "734427-Aphex-Twin-Syro"
+            item_id = parts[index + 1].split('-')[0]
+            if not item_id.isdigit():
+                raise ValueError(f"Invalid {item_type} ID extracted: {item_id}")
+            return item_type, item_id
+        except (IndexError, ValueError) as e:
+            raise ValueError(f"Could not extract valid ID from URL: {url}") from e
     else:
         raise ValueError("URL must contain 'master' or 'release'")
 
