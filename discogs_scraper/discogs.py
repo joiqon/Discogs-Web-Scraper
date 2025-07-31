@@ -40,9 +40,17 @@ def get_discogs_metadata(url):
     'styles': ', '.join(data.get('styles', [])),
     'label': data['labels'][0]['name'] if 'labels' in data else '',
     'country': data.get('country', ''),
+    'catalog_number': data['labels'][0].get('catno', '') if 'labels' in data else '',
+    'formats': ', '.join(fmt.get('name', '') for fmt in data.get('formats', [])),
+    'identifiers': ', '.join(
+        f"{id['type']}: {id['value']}"
+        for id in data.get('identifiers', [])
+        if 'value' in id
+    ),
     'discogs_url': url,
     'cover_image_url': data.get('images', [{}])[0].get('resource_url', '')
 }
+
 
     tracklist = [
         f"{track['position']}. {track['title']} ({track.get('duration', 'n/a')})"

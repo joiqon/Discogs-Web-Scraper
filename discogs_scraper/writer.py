@@ -16,7 +16,10 @@ def write_to_obsidian(fields, tracklist, credits, output_dir):
         f.write(f"genres:: {fields['genres']}\n")
         f.write(f"styles:: {fields['styles']}\n")
         f.write(f"label:: {fields['label']}\n")
-        f.write(f"country:: {fields.get('country', '')}\n")
+        f.write(f"country:: {fields['country']}\n")
+        f.write(f"catalog_number:: {fields['catalog_number']}\n")
+        f.write(f"format:: {fields['formats']}\n")
+        f.write(f"identifiers:: {fields['identifiers']}\n")
         f.write(f"discogs:: {fields['discogs_url']}\n\n")
 
         # Obsidian-friendly image embed
