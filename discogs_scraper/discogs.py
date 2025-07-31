@@ -49,6 +49,8 @@ def get_discogs_metadata(url):
     ),
     'discogs_url': url,
     'cover_image_url': data.get('images', [{}])[0].get('resource_url', '')
+    print(f"Image URL: {data.get('images', [{}])[0].get('resource_url', '❌ MISSING')}")
+
 }
 
 

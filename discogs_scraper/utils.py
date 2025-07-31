@@ -7,20 +7,24 @@ def slugify(value):
 
 def download_cover_image(url, output_dir, name_base):
     if not url:
-        return ''
+        raise ValueError("No cover image URL provided.")
+
+    print(f"Attempting to download image from: {url}")  # debug
+
     ext = url.split('.')[-1].split('?')[0]
     filename = f"{slugify(name_base)}_cover.{ext}"
     filepath = os.path.join(output_dir, filename)
+
+    headers = {
+        'User-Agent': 'ObsidianDiscogsScraper/1.0',
+        'Referer': 'https://www.discogs.com'
+    }
+
     try:
-        headers = {
-            'User-Agent': 'ObsidianDiscogsScraper/1.0',
-            'Referer': 'https://www.discogs.com'
-        }
-        img = requests.get(url, headers=headers)
-        img.raise_for_status()
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
         with open(filepath, 'wb') as f:
-            f.write(img.content)
+            f.write(response.content)
         return filename
     except Exception as e:
-        print(f"⚠️ Could not download image: {e}")
-        return ''
+        raise RuntimeError(f"❌ Failed to download cover image: {e}")
