@@ -11,7 +11,7 @@ import os
 load_dotenv()  # loads from .env file
 
 DISCOGS_TOKEN = os.getenv('DISCOGS_TOKEN')
-OUTPUT_LOCATION = '/Users/josephknight/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian Vault/003 Music'
+OUTPUT_LOCATION = os.getenv('OUTPUT_LOCATION')
 
 def extract_master_or_release_id(url):
     parsed = urlparse(url)
