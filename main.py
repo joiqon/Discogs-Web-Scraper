@@ -5,9 +5,12 @@ import os
 import re
 from urllib.parse import urlparse
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
-# Replace with your Discogs personal token
-DISCOGS_TOKEN = 'fvNMHFELJsMuauaYYTzyMbWDgsGirydfBHSXjvoW' # 'YOUR_DISCOGS_PERSONAL_ACCESS_TOKEN'
+load_dotenv()  # loads from .env file
+
+DISCOGS_TOKEN = os.getenv('DISCOGS_TOKEN')
 OUTPUT_LOCATION = '/Users/josephknight/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian Vault/003 Music'
 
 def extract_master_or_release_id(url):
