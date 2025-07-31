@@ -8,16 +8,27 @@ def write_to_obsidian(fields, tracklist, credits, output_dir):
     image_filename = download_cover_image(fields['cover_image_url'], output_dir, fields['title'])
 
     with open(filepath, 'w', encoding='utf-8') as f:
+        # Dataview inline fields
+        f.write("tags:: #discogs #music\n")
+        f.write(f"artist:: {fields['artist']}\n")
+        f.write(f"title:: {fields['title']}\n")
+        f.write(f"year:: {fields['year']}\n")
+        f.write(f"genres:: {fields['genres']}\n")
+        f.write(f"styles:: {fields['styles']}\n")
+        f.write(f"label:: {fields['label']}\n")
+        f.write(f"country:: {fields.get('country', '')}\n")
+        f.write(f"discogs:: {fields['discogs_url']}\n\n")
+
+        # Obsidian-friendly image embed
         if image_filename:
             f.write(f"![[{image_filename}]]\n\n")
-        for key in ['artist', 'title', 'year', 'genres', 'styles', 'label']:
-            f.write(f"{key}:: {fields[key]}\n")
-        f.write(f"discogs:: [[{fields['discogs_url']}]]\n\n")
-        f.write("tracklist::\n")
+
+        f.write("## Tracklist\n")
         for track in tracklist:
             f.write(f"- {track}\n")
+
         if credits:
-            f.write("\ncredits::\n")
+            f.write("\n## Credits\n")
             for credit in credits:
                 f.write(f"- {credit}\n")
 
