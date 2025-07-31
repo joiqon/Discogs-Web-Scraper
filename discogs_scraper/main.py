@@ -1,7 +1,7 @@
 import sys
-from config import OUTPUT_LOCATION
-from discogs import get_discogs_metadata
-from writer import write_to_obsidian
+from discogs_scraper.config import OUTPUT_LOCATION
+from discogs_scraper.discogs import get_discogs_metadata
+from discogs_scraper.writer import write_to_obsidian
 
 def main():
     if len(sys.argv) < 2:
