@@ -13,12 +13,21 @@ OUTPUT_LOCATION = '/Users/josephknight/Library/Mobile Documents/iCloud~md~obsidi
 def extract_master_or_release_id(url):
     parsed = urlparse(url)
     parts = parsed.path.strip('/').split('/')
-    if 'master' in parts:
-        return 'master', parts[-1].split('-')[0]
-    elif 'release' in parts:
-        return 'release', parts[-1].split('-')[0]
+
+    if 'master' in parts or 'release' in parts:
+        item_type = 'master' if 'master' in parts else 'release'
+        try:
+            index = parts.index(item_type)
+            # Handle cases like "734427" or "734427-Aphex-Twin-Syro"
+            item_id = parts[index + 1].split('-')[0]
+            if not item_id.isdigit():
+                raise ValueError(f"Invalid {item_type} ID extracted: {item_id}")
+            return item_type, item_id
+        except (IndexError, ValueError) as e:
+            raise ValueError(f"Could not extract valid ID from URL: {url}") from e
     else:
         raise ValueError("URL must contain 'master' or 'release'")
+
 
 def get_discogs_metadata(url):
     item_type, item_id = extract_master_or_release_id(url)
@@ -75,19 +84,28 @@ def slugify(value):
 def download_cover_image(url, output_dir, name_base):
     if not url:
         return ''
-    ext = url.split('.')[-1].split('?')[0]  # Remove query params
+    
+    ext = url.split('.')[-1].split('?')[0]  # Strip query parameters
     filename = f"{slugify(name_base)}_cover.{ext}"
     filepath = os.path.join(output_dir, filename)
 
     try:
-        img = requests.get(url)
+        headers = {
+            'User-Agent': 'ObsidianDiscogsScraper/1.0',
+            'Referer': 'https://www.discogs.com'  # Optional, but helps bypass blocks
+        }
+
+        img = requests.get(url, headers=headers)
         img.raise_for_status()
+
         with open(filepath, 'wb') as f:
             f.write(img.content)
+
         return filename
     except Exception as e:
         print(f"⚠️ Could not download image: {e}")
         return ''
+
 
 def write_to_obsidian(fields, tracklist, credits, output_dir):
     filename = f"{slugify(fields['artist'])} - {slugify(fields['title'])}.md"
