@@ -61,7 +61,7 @@ def get_discogs_metadata(url):
         'styles': ', '.join(data.get('styles', [])),
         'label': data['labels'][0]['name'] if 'labels' in data else '',
         'discogs_url': url,
-        'cover_image_url': data.get('images', [{}])[0].get('uri', '')
+        'cover_image_url': data.get('images', [{}])[0].get('resource_url', '')
     }
 
     tracklist = [
