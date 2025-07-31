@@ -20,7 +20,9 @@ def write_to_obsidian(fields, tracklist, credits, output_dir):
         f.write(f"catalog_number:: {fields['catalog_number']}\n")
         f.write(f"format:: {fields['formats']}\n")
         f.write(f"identifiers:: {fields['identifiers']}\n")
-        f.write(f"discogs:: {fields['discogs_url']}\n\n")
+
+        discogs_link = f"[{fields['title']} on Discogs]({fields['discogs_url']})"
+        f.write(f"discogs:: {discogs_link}\n\n")
 
         # Obsidian-friendly image embed
         if image_filename:
@@ -38,3 +40,4 @@ def write_to_obsidian(fields, tracklist, credits, output_dir):
     print(f"✅ Saved note to: {filepath}")
     if image_filename:
         print(f"🖼️  Saved image: {image_filename}")
+
